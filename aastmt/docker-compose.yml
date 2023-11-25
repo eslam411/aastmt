@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  aastmt:
+    image: ${DOCKER_REGISTRY-}aastmt
+    build:
+      context: .
+      dockerfile: ./Dockerfile
