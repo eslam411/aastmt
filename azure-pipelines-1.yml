@@ -24,5 +24,4 @@ stages:
       inputs:
         command: build
         dockerfile: '$(Build.SourcesDirectory)/aastmt/Dockerfile'
-        tags: |
-          $(tag)
+        tags: abdo
