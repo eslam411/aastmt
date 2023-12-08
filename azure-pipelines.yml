@@ -24,5 +24,16 @@ stages:
       inputs:
         command: build
         dockerfile: '$(Build.SourcesDirectory)/aastmt/Dockerfile'
-        tags: |
-          $(tag)
+        tags: eslam411/aastmt:latest
+
+# Push to docker hub
+  - job: DockerHub
+    displayName: Push to docker hub
+    pool: Eslam
+    steps:
+    - task: CmdLine@2
+      displayName: Push image
+      inputs:
+        script: 'docker push eslam411/aastmt:latest'
+
+#  CD to k8s
