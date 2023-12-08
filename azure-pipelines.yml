@@ -20,17 +20,17 @@ stages:
     pool: Eslam
     steps:
 
-# # Build custom docker image
-#     - task: CmdLine@2
-#       displayName: Build image
-#       inputs:
-#         script: 'docker build -t eslam411/aastmt:latest ./aastmt/'
+# Build custom docker image
+    - task: CmdLine@2
+      displayName: Build image
+      inputs:
+        script: 'docker build -t eslam411/aastmt:latest ./aastmt/'
 
-# # Push to docker hub
-#     - task: CmdLine@2
-#       displayName: Push image
-#       inputs:
-#         script: 'docker push eslam411/aastmt:latest'
+# Push to docker hub
+    - task: CmdLine@2
+      displayName: Push image
+      inputs:
+        script: 'docker push eslam411/aastmt:latest'
 
 # Deploy the app to the AKS
     - task: KubernetesManifest@1
