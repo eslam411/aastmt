@@ -33,6 +33,12 @@ stages:
         script: 'docker push eslam411/aastmt:latest'
 
 
-    
+    - task: KubernetesManifest@1
+      inputs:
+        action: 'deploy'
+        connectionType: 'kubernetesServiceConnection'
+        kubernetesServiceConnection: 'aks-eslam-test-1702077176195'
+        manifests: 'aastmt/k8s/'
+        namespace: 'test'
 
 #  CD to k8s
