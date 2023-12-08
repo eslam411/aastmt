@@ -12,11 +12,11 @@ variables:
   tag: '$(Build.BuildId)'
 
 stages:
-- stage: Build
-  displayName: Build image
+- stage: CI_CD
+  displayName: CI_CD
   jobs:
-  - job: Build
-    displayName: Build
+  - job: CI_CD
+    displayName: CI/CD
     pool: Eslam
     steps:
 
@@ -24,7 +24,7 @@ stages:
     - task: CmdLine@2
       displayName: Build image
       inputs:
-        script: 'docker build eslam411/aastmt:latest .'
+        script: 'docker build -t eslam411/aastmt:latest .'
 
 # Push to docker hub
     - task: CmdLine@2
