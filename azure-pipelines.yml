@@ -19,21 +19,20 @@ stages:
     displayName: Build
     pool: Eslam
     steps:
-    - task: Docker@2
-      displayName: Build an image
+
+# Build custom docker image
+    - task: CmdLine@2
+      displayName: Build image
       inputs:
-        command: build
-        dockerfile: '$(Build.SourcesDirectory)/aastmt/Dockerfile'
-        tags: eslam411/aastmt:latest
+        script: 'docker build eslam411/aastmt:latest .'
 
 # Push to docker hub
-  - job: DockerHub
-    displayName: Push to docker hub
-    pool: Eslam
-    steps:
     - task: CmdLine@2
       displayName: Push image
       inputs:
         script: 'docker push eslam411/aastmt:latest'
+
+
+    
 
 #  CD to k8s
