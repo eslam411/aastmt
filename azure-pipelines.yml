@@ -37,5 +37,5 @@ stages:
         connectionType: 'kubernetesServiceConnection'
         kubernetesServiceConnection: 'eslamaks-eslamaks-test-1702147657190'
         namespace: 'test'
-        manifests: './aastmt/*'
+        manifests: './aastmt/k8s/*'
 
