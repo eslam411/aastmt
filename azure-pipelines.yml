@@ -8,8 +8,6 @@ trigger:
 resources:
 - repo: self
 
-variables:
-  tag: '$(Build.BuildId)'
 
 stages:
 - stage: CI_CD
@@ -17,7 +15,7 @@ stages:
   jobs:
   - job: CI_CD
     displayName: CI/CD
-    pool: Eslam
+    pool: Eslam2
     steps:
 
 # Build custom docker image
@@ -34,12 +32,10 @@ stages:
 
 # Deploy the app to the AKS
     - task: KubernetesManifest@1
-      displayName: Deploy App
       inputs:
         action: 'deploy'
         connectionType: 'kubernetesServiceConnection'
-        kubernetesServiceConnection: 'aks-eslam-test-1702077176195'
-        manifests: 'aastmt/k8s/*'
+        kubernetesServiceConnection: 'Eslam2-eslam-test-1702121308273'
         namespace: 'test'
+        manifests: './aastmt/k8s/*'
 
-#  CD to k8s
