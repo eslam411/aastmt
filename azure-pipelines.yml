@@ -35,7 +35,7 @@ stages:
       inputs:
         action: 'deploy'
         connectionType: 'kubernetesServiceConnection'
-        kubernetesServiceConnection: 'Eslam2-eslam-test-1702121308273'
+        kubernetesServiceConnection: 'eslamaks-eslamaks-test-1702147657190'
         namespace: 'test'
-        manifests: './aastmt/k8s/*'
+        manifests: './aastmt/*'
 
