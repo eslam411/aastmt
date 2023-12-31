@@ -52,22 +52,28 @@ stages:
   - job: Terraform
     pool: Eslam2
     steps:
-    - task: ms-devlabs.custom-terraform-tasks.custom-terraform-release-task.TerraformTaskV1@0
-      inputs:
-        workingDirectory: '$(System.DefaultWorkingDirectory)/aastmt/terraform'
-        command: 'init'
-        environmentServiceNameAzureRM: 'azure-service-connection'
-        backendServiceArm: 'azure-service-connection'
-        backendAzureRmStorageAccountName: 'azure-service-connection'
+    # - task: ms-devlabs.custom-terraform-tasks.custom-terraform-release-task.TerraformTaskV1@0
+    #   inputs:
+    #     workingDirectory: '$(System.DefaultWorkingDirectory)/aastmt/terraform'
+    #     command: 'init'
+    #     environmentServiceNameAzureRM: 'azure-service-connection'
+    #     backendServiceArm: 'azure-service-connection'
+    #     backendAzureRmStorageAccountName: 'azure-service-connection'
         
-    - task: ms-devlabs.custom-terraform-tasks.custom-terraform-release-task.TerraformTaskV1@0
+    # - task: ms-devlabs.custom-terraform-tasks.custom-terraform-release-task.TerraformTaskV1@0
+    #   inputs:
+    #     workingDirectory: '
+    #     command: 'apply'
+    #     commandOptions: '-auto-approve'
+    #     environmentServiceNameAzureRM: 'azure-service-connection'
+    #     backendServiceArm: 'azure-service-connection'
+    #     backendAzureRmStorageAccountName: 'azure-service-connection'
+    - task: CmdLine@2
       inputs:
+        script: |
+          terraform init
+          terraform apply -auto-approve
         workingDirectory: '$(System.DefaultWorkingDirectory)/aastmt/terraform'
-        command: 'apply'
-        commandOptions: '-auto-approve'
-        environmentServiceNameAzureRM: 'azure-service-connection'
-        backendServiceArm: 'azure-service-connection'
-        backendAzureRmStorageAccountName: 'azure-service-connection'
 
 
 - stage: KubernetesDeploy
