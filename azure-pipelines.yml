@@ -46,6 +46,12 @@
 trigger:
 - main
 
+variables:
+  AKS_CLUSTER_NAME: terraform-aks1
+  RESOURCE_GROUP_NAME: EslamRes1
+  SUBSCRIPTION_ID: 3e5178ff-62ac-4eaf-a28b-13e663368189
+
+
 stages:
 # - stage: TerraformApply
 #   jobs:
