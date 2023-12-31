@@ -1,105 +1,40 @@
-# # Docker
-# # Build a Docker image
-# # https://docs.microsoft.com/azure/devops/pipelines/languages/docker
-
-# trigger:
-# - main
-
-# resources:
-# - repo: self
-
-
-# stages:
-# - stage: CI_CD
-#   displayName: CI_CD
-#   jobs:
-#   - job: CI_CD
-#     displayName: CI/CD
-#     pool: Eslam2
-#     steps:
-
-# # Build custom docker image
-#     - task: CmdLine@2
-#       displayName: Build image
-#       inputs:
-#         script: 'docker build -t eslam411/aastmt:latest ./aastmt/'
-
-# # Push to docker hub
-#     - task: CmdLine@2
-#       displayName: Push image
-#       inputs:
-#         script: 'docker push eslam411/aastmt:latest'
-
-# # Deploy the app to the AKS
-#     - task: KubernetesManifest@1
-#       inputs:
-#         action: 'deploy'
-#         connectionType: 'kubernetesServiceConnection'
-#         kubernetesServiceConnection: 'eslamaks-eslamaks-test-1702147657190'
-#         namespace: 'test'
-#         manifests: './aastmt/k8s/*'
-
-
-
-
+# Docker
+# Build a Docker image
+# https://docs.microsoft.com/azure/devops/pipelines/languages/docker
 
 trigger:
 - main
 
-variables:
-  AKS_CLUSTER_NAME: terraform-aks1
-  RESOURCE_GROUP_NAME: EslamRes1
-  AKS_SERVICE_CONNECTION_NAME: akssvc
+resources:
+- repo: self
 
 
 stages:
-# - stage: TerraformApply
-#   jobs:
-#   - job: Terraform
-#     pool: Eslam2
-#     steps:
-    # - task: CmdLine@2
-    #   inputs:
-    #     script: |
-    #       terraform init
-    #       terraform apply -auto-approve
-    #     workingDirectory: '$(System.DefaultWorkingDirectory)/aastmt/terraform'
-
-
-# - stage: KubernetesDeploy
-#   jobs:
-#   - deployment: Deploy
-#     pool: Eslam2
-#     environment: 'AASTMT'
-#     strategy:
-#       runOnce:
-#         deploy:
-#           steps:
-#           - task: Kubernetes@1
-#             inputs:
-#               connectionType: 'Azure Resource Manager'
-#               azureSubscriptionEndpoint: 'azure-service-connection'
-#               azureResourceGroup: 'EslamRes1'
-#               kubernetesCluster: 'terraform-aks1'
-#               command: 'apply'
-#               useConfigurationFile: true
-#               configuration: './aastmt/k8s/*'
-- stage: DeployYAML
+- stage: CI_CD
+  displayName: CI_CD
   jobs:
-  - job: Deploy
+  - job: CI_CD
+    displayName: CI/CD
     pool: Eslam2
     steps:
-    - task: AzureCLI@2
-      displayName: Create AKS Service Connection
+
+# Build custom docker image
+    - task: CmdLine@2
+      displayName: Build image
       inputs:
-        azureSubscription: 'azure-service-connection'
-        scriptType: 'bash'
-        scriptLocation: 'inlineScript'
-        inlineScript: az devops service-endpoint kubernetes create --name $(AKS_SERVICE_CONNECTION_NAME) --cluster-name $(AKS_CLUSTER_NAME) --resource-group $(RESOURCE_GROUP_NAME)
-    - task: KubernetesManifest@0
-      displayName: Deploy YAML
+        script: 'docker build -t eslam411/aastmt:latest ./aastmt/'
+
+# Push to docker hub
+    - task: CmdLine@2
+      displayName: Push image
+      inputs:
+        script: 'docker push eslam411/aastmt:latest'
+
+# Deploy the app to the AKS
+    - task: KubernetesManifest@1
       inputs:
         action: 'deploy'
+        connectionType: 'kubernetesServiceConnection'
+        kubernetesServiceConnection: 'eslamaks-eslamaks-test-1702147657190'
+        namespace: 'test'
         manifests: './aastmt/k8s/*'
-        connectionType: 'Kubernetes Service Connection'
-        kubernetesServiceEndpoint: '$(AKS_SERVICE_CONNECTION_NAME)'  # Reference the dynamically created service connection
