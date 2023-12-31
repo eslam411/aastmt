@@ -49,7 +49,7 @@ trigger:
 variables:
   AKS_CLUSTER_NAME: terraform-aks1
   RESOURCE_GROUP_NAME: EslamRes1
-  SUBSCRIPTION_ID: 3e5178ff-62ac-4eaf-a28b-13e663368189
+  AKS_SERVICE_CONNECTION_NAME: akssvc
 
 
 stages:
@@ -95,9 +95,7 @@ stages:
         azureSubscription: 'azure-service-connection'
         scriptType: 'bash'
         scriptLocation: 'inlineScript'
-        inlineScript: |
-          az aks get-credentials -n $(AKS_CLUSTER_NAME) -g $(RESOURCE_GROUP_NAME) --subscription $(SUBSCRIPTION_ID)
-          az devops service-endpoint kubernetes create --name $(AKS_SERVICE_CONNECTION_NAME) --cluster-name $(AKS_CLUSTER_NAME) --resource-group $(RESOURCE_GROUP_NAME)
+        inlineScript: az devops service-endpoint kubernetes create --name $(AKS_SERVICE_CONNECTION_NAME) --cluster-name $(AKS_CLUSTER_NAME) --resource-group $(RESOURCE_GROUP_NAME)
     - task: KubernetesManifest@0
       displayName: Deploy YAML
       inputs:
