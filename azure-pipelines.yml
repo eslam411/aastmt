@@ -44,7 +44,7 @@
 
 
 trigger:
-- master
+- main
 
 stages:
 - stage: TerraformApply
@@ -52,6 +52,11 @@ stages:
   - job: Terraform
     pool: Eslam2
     steps:
+    - task: ms-devlabs.custom-terraform-tasks.custom-terraform-release-task.TerraformTaskV1@0
+      inputs:
+        workingDirectory: '$(System.DefaultWorkingDirectory)/aastmt/terraform'
+        command: 'init'
+        
     - task: ms-devlabs.custom-terraform-tasks.custom-terraform-release-task.TerraformTaskV1@0
       inputs:
         workingDirectory: '$(System.DefaultWorkingDirectory)/aastmt/terraform'
