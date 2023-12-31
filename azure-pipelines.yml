@@ -47,17 +47,17 @@ trigger:
 - main
 
 stages:
-- stage: TerraformApply
-  jobs:
-  - job: Terraform
-    pool: Eslam2
-    steps:
-    - task: CmdLine@2
-      inputs:
-        script: |
-          terraform init
-          terraform apply -auto-approve
-        workingDirectory: '$(System.DefaultWorkingDirectory)/aastmt/terraform'
+# - stage: TerraformApply
+#   jobs:
+#   - job: Terraform
+#     pool: Eslam2
+#     steps:
+    # - task: CmdLine@2
+    #   inputs:
+    #     script: |
+    #       terraform init
+    #       terraform apply -auto-approve
+    #     workingDirectory: '$(System.DefaultWorkingDirectory)/aastmt/terraform'
 
 
 # - stage: KubernetesDeploy
