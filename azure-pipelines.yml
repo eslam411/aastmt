@@ -54,7 +54,7 @@ stages:
     steps:
     - task: ms-devlabs.custom-terraform-tasks.custom-terraform-release-task.TerraformTaskV1@0
       inputs:
-        workingDirectory: '$(System.DefaultWorkingDirectory)/aastmt/terraform/main.tf'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/aastmt/terraform'
         command: 'apply'
         commandOptions: '-auto-approve'
         environmentServiceNameAzureRM: 'azure-service-connection'
