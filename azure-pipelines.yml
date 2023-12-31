@@ -81,6 +81,7 @@ stages:
 - stage: DeployYAML
   jobs:
   - job: Deploy
+    pool: Eslam2
     steps:
     - task: AzureCLI@2
       displayName: Create AKS Service Connection
