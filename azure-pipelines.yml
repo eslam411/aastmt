@@ -52,22 +52,6 @@ stages:
   - job: Terraform
     pool: Eslam2
     steps:
-    # - task: ms-devlabs.custom-terraform-tasks.custom-terraform-release-task.TerraformTaskV1@0
-    #   inputs:
-    #     workingDirectory: '$(System.DefaultWorkingDirectory)/aastmt/terraform'
-    #     command: 'init'
-    #     environmentServiceNameAzureRM: 'azure-service-connection'
-    #     backendServiceArm: 'azure-service-connection'
-    #     backendAzureRmStorageAccountName: 'azure-service-connection'
-        
-    # - task: ms-devlabs.custom-terraform-tasks.custom-terraform-release-task.TerraformTaskV1@0
-    #   inputs:
-    #     workingDirectory: '
-    #     command: 'apply'
-    #     commandOptions: '-auto-approve'
-    #     environmentServiceNameAzureRM: 'azure-service-connection'
-    #     backendServiceArm: 'azure-service-connection'
-    #     backendAzureRmStorageAccountName: 'azure-service-connection'
     - task: CmdLine@2
       inputs:
         script: |
@@ -76,21 +60,41 @@ stages:
         workingDirectory: '$(System.DefaultWorkingDirectory)/aastmt/terraform'
 
 
-- stage: KubernetesDeploy
+# - stage: KubernetesDeploy
+#   jobs:
+#   - deployment: Deploy
+#     pool: Eslam2
+#     environment: 'AASTMT'
+#     strategy:
+#       runOnce:
+#         deploy:
+#           steps:
+#           - task: Kubernetes@1
+#             inputs:
+#               connectionType: 'Azure Resource Manager'
+#               azureSubscriptionEndpoint: 'azure-service-connection'
+#               azureResourceGroup: 'EslamRes1'
+#               kubernetesCluster: 'terraform-aks1'
+#               command: 'apply'
+#               useConfigurationFile: true
+#               configuration: './aastmt/k8s/*'
+- stage: DeployYAML
   jobs:
-  - deployment: Deploy
-    pool: Eslam2
-    environment: 'AASTMT'
-    strategy:
-      runOnce:
-        deploy:
-          steps:
-          - task: Kubernetes@1
-            inputs:
-              connectionType: 'Azure Resource Manager'
-              azureSubscriptionEndpoint: 'azure-service-connection'
-              azureResourceGroup: 'EslamRes1'
-              kubernetesCluster: 'terraform-aks1'
-              command: 'apply'
-              useConfigurationFile: true
-              configuration: './aastmt/k8s/*'
+  - job: Deploy
+    steps:
+    - task: AzureCLI@2
+      displayName: Create AKS Service Connection
+      inputs:
+        azureSubscription: 'azure-service-connection'
+        scriptType: 'bash'
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+          az aks get-credentials -n $(AKS_CLUSTER_NAME) -g $(RESOURCE_GROUP_NAME) --subscription $(SUBSCRIPTION_ID)
+          az devops service-endpoint kubernetes create --name $(AKS_SERVICE_CONNECTION_NAME) --cluster-name $(AKS_CLUSTER_NAME) --resource-group $(RESOURCE_GROUP_NAME)
+    - task: KubernetesManifest@0
+      displayName: Deploy YAML
+      inputs:
+        action: 'deploy'
+        manifests: './aastmt/k8s/*'
+        connectionType: 'Kubernetes Service Connection'
+        kubernetesServiceEndpoint: '$(AKS_SERVICE_CONNECTION_NAME)'  # Reference the dynamically created service connection
